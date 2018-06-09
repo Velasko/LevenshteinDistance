@@ -13,9 +13,23 @@ def minimo(tab, X, Y, cost):
     else:
         return 0
 
-def LevenshteinDistance2(word1, word2, CaseSensitive = True):
+def LevenshteinDistance(word1, word2, case_sensitive = False, return_matrix=False, print_matrix=False):
+    """This code shows how many operations would be necessary to change the word1 into word2.
+    The parameters are:
 
-    if CaseSensitive:
+    case_sensitive: Bool
+        Parameter to decide if it wants to consider A = a or not.
+
+    return_matrix: Bool
+        If True, returns the matrix for the path.
+        False returns the difference between the string
+
+    print_matrix: Bool
+        Show or not the matrix showing the path for the change
+
+    """
+
+    if case_sensitive:
         word1 = word1.lower()
         word2 = word2.lower()
 
@@ -35,29 +49,14 @@ def LevenshteinDistance2(word1, word2, CaseSensitive = True):
 
             tab[X, Y] = minimo(tab, X, Y, cost)
 
-    print(tab)
+    if print_matrix:
+        print(tab)
+
+    if return_matrix:
+        return tab
     return tab[-1, -1]
-
-def LevenshteinDistanceRecursive(word1, word2, CaseSensitive=False):
-    global tab
-    if CaseSensitive:
-        word1 = word1.lower()
-        word2 = word2.lower()
-
-    if word1 == '' or word2 == '':
-        return max(len(word1), len(word2))
-
-    if word1[-1] == word2[-1]:
-        cost = 0
-    else:
-        cost = 1
-
-    return min(LevenshteinDistanceRecursive(word1[:-1], word2) + 1,
-               LevenshteinDistanceRecursive(word1, word2[:-1]) + 1,
-               LevenshteinDistanceRecursive(word1[:-1], word2[:-1]) + cost)
-
 
 if __name__ == '__main__':
     word1, word2 = "Aromatico", "aro"
-    dif = LevenshteinDistanceRecursive(word1, word2, True)
+    dif = LevenshteinDistance(word1, word2)
     print(dif)
